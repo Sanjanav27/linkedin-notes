@@ -9,16 +9,21 @@
         <a class="btn rounded-circle" style="float: right; margin-top:0%; margin-right: -4%;" href= "/crowdengine/next?page={{name}}" > <img src={{url_for('static',filename="/icons/caret-right-fill.svg")}} width=40px height = 40px></a>
           <br><br><br>
   
-        <form action='/crowdengine/write' method="POST" >
+        <form action='/crowdengine/write/{{name}}' method="POST" >
             <center><legend>{{name}}</legend></center>
+            
             </br>
 
             <input type="hidden" name="name" value="{{actor}}">
 
             <input type="hidden" name="movie" value="{{name}}">
+            <div class="form-group ">
+              <label for="Duration">Duration</label>
+              <input type="number" class="form-control" id="Duration"  name="Duration" placeholder="Enter Character Duration in minutes">
+
             <div class="form-group">
               <label for="Dresscolor">Linkedln-id</label>
-              <input type="text" class="form-control" id="Dresscolor"  name="Dresscolor" placeholder="Enter your Linkedln id">
+              <input type="text" class="form-control" id="Dresscolor"  name="Dresscolor" placeholder="{{link}}">
             </div>
 
             <div class="form-group ">
@@ -29,41 +34,14 @@
               
             </div>
            
-
-            <!-- <div class="form-group">
-              <label for="Dresscolor">Dresscolor</label>
-              <input type="text" class="form-control" id="Dresscolor"  name="Dresscolor" placeholder="Enter Character Dresscolor">
-            </div>
-
-            <div class="form-group">
-                <label for="Hairstyle">Hairstyle</label>
-                <input type="text" class="form-control" id="Hairstyle"  name= "Hairstyle" placeholder="Enter Character Hairstyle">
-            </div>
-
-            <div class="form-group">
-                <label for="Role">Role</label>
-                <input type="text" class="form-control" id="Role" name="Role" placeholder="Enter Character Role eg:(Hero,comedian,hero brother..)">
-            </div>
-
+            </br>
+            </br>
+            <form action='/crowdengine/submit' method="POST">
             
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="Hit" id="Hit" value="Hit" checked>
-                <label class="form-check-label" for="Hit">
-                  Hit
-                </label>
-              </div>
-                </br>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="Hit" id="Flop" value="Flop">
-                <label class="form-check-label" for="Flop">
-                  Flop
-                </label>
-              </div> -->
-            </br>
-            </br>
             <center><button type="submit" class="btn btn-success">Submit</button>
        
             </center>
+          </form>
               
           </form>
 
