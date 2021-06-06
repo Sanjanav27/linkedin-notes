@@ -120,16 +120,18 @@ def download():
 @app.route('/submit/<string:name>',methods=["POST","GET"])
 def submit(name):
     name=name
+    comment=request.form.get("comment")
+    print(comment)
     x=Linked_name.index(name)
     link=ll_link[x]
     data={
     "name" : name,
     "link" : link,
+    "notes":comment
     
 
     }
 
-    print(data)
 
     collection.insert_one(data)
 
