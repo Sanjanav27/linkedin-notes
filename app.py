@@ -4,12 +4,26 @@ import pandas as pd
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
-
+from openpyxl import Workbook
+import xlwt
+from xlwt import Workbook
 load_dotenv()
 
 
 
 app = Flask(__name__)
+
+
+  
+# Workbook is created
+wb = Workbook()
+  
+# add_sheet is used to create sheet.
+sheet2 = wb.add_sheet('Sheet2')
+  
+
+
+
 MONGO_URI = os.getenv("MONGO_URI")
 cluster=MongoClient(MONGO_URI)
 db=cluster["linkedin-notes"]
@@ -25,6 +39,8 @@ df.dropna(inplace = True)
 Linked_name = df['Name'].tolist() 
 ll_link=df['LinkedIn link'].tolist()
 
+dic=df.to_dict()
+print(dic)
 
 size=len(Linked_name)
 
@@ -146,15 +162,33 @@ def submit(name):
     print(comment)
     x=Linked_name.index(name)
     link=ll_link[x]
-    data={
-    "name" : name,
-    "link" : link,
-    "notes":comment
-    
-    }
+    namemongo=[]
+    for all in collection.find({},{ "_id": 0,"name":1}):
+        print(all)
+        for all in all.values():
+            namemongo.append(all)
+    print(namemongo)
+    a=[]
+    if name in namemongo:
+        query={"name":name}
+        newvalues = { "$set": { "notes": comment } }
+
+        collection.update_one(query, newvalues)
+        sheet2.write(x, 1, comment)  
 
 
-    collection.insert_one(data)
+    else:
+        data={
+        "name" : name,
+        "link" : link,
+        "notes":comment
+        }
+
+
+        collection.insert_one(data)
+        sheet2.write(x, 0, name) 
+        sheet2.write(x, 1, comment)  
+        wb.save('static/data.xlsx')
     
 
 
