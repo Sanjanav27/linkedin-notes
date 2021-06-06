@@ -2,10 +2,16 @@ from flask import Flask,render_template,request,url_for,redirect
 import numpy as np
 import pandas as pd
 from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
 
-app = Flask(__name__ )
+load_dotenv()
 
-cluster=MongoClient("mongodb+srv://sanju:1234@cluster0.wllvz.mongodb.net/sanju?retryWrites=true&w=majority")
+
+
+app = Flask(__name__)
+MONGO_URI       = os.getenv("MONGO_URI")
+cluster=MongoClient(MONGO_URI)
 db=cluster["linkedin-notes"]
 collection=db["detail"]
 
