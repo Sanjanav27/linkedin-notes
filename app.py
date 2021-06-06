@@ -16,6 +16,7 @@ db=cluster["linkedin-notes"]
 collection=db["detail"]
 
 
+
 data = pd.read_excel (r'static/LinkedIn_Notes.xlsx',sheet_name='Sheet1') 
 
 df = pd.DataFrame(data, columns= ['Name','LinkedIn link'])
@@ -57,6 +58,23 @@ def movie_name(name):
     x=Linked_name.index(name)
     link=ll_link[x]
     print(link)
+    namemongo=[]
+    for all in collection.find({},{ "_id": 0,"name":1}):
+        print(all)
+        for all in all.values():
+            namemongo.append(all)
+    print(namemongo)
+    if name in namemongo:
+        query={"name":name}
+        doc=collection.find(query)
+        for y in doc:
+            print(y)
+            print(y["notes"])
+        
+
+
+
+    
     return render_template('movies.html' ,name = name,actor ="vadivelu",link=link)
 
 @app.errorhandler(500)
@@ -109,6 +127,7 @@ def write_db(name):
         print(link)
         comment = request.form["logname"]
         print(comment)
+        
         data.write(movie=movie,actor=actor,duration=dur,hairstyle=hair,role=role,dresscolor=color,target=hit)
 
     return render_template('movies.html',p="ok" ,name=movie,link="link")
@@ -129,11 +148,11 @@ def submit(name):
     "link" : link,
     "notes":comment
     
-
     }
 
 
     collection.insert_one(data)
+    
 
 
     return "added successfully"
