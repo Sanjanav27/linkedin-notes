@@ -10,7 +10,7 @@ load_dotenv()
 
 
 app = Flask(__name__)
-MONGO_URI       = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGO_URI")
 cluster=MongoClient(MONGO_URI)
 db=cluster["linkedin-notes"]
 collection=db["detail"]
@@ -68,6 +68,7 @@ def movie_name(name):
     if name in namemongo:
         query={"name":name}
         doc=collection.find(query)
+        a = []
         for y in doc:
             print(y)
             a.append(y["notes"])
