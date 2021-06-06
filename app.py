@@ -1,10 +1,13 @@
 from flask import Flask,render_template,request,url_for,redirect
 import numpy as np
 import pandas as pd
-
+from pymongo import MongoClient
 
 app = Flask(__name__ )
 
+cluster=MongoClient("mongodb+srv://sanju:1234@cluster0.wllvz.mongodb.net/sanju?retryWrites=true&w=majority")
+db=cluster["linkedin-notes"]
+collection=db["detail"]
 
 
 data = pd.read_excel (r'static/LinkedIn_Notes.xlsx',sheet_name='Sheet1') 
@@ -45,7 +48,10 @@ def movie_name(name):
     
     if name not in Linked_name:
         return render_template('error.html',error="Name Not Found")
-    return render_template('movies.html' ,name = name,actor ="vadivelu")
+    x=Linked_name.index(name)
+    link=ll_link[x]
+    print(link)
+    return render_template('movies.html' ,name = name,actor ="vadivelu",link=link)
 
 @app.errorhandler(500)
 def internal_error(e):
@@ -65,7 +71,7 @@ def pre():
     x=Linked_name.index(name)
     link=ll_link[x]
 
-    return redirect(url_for('movie_name',name = name) )
+    return redirect(url_for('movie_name',name = name,link=link) )
     
    
 
@@ -78,7 +84,7 @@ def next():
     x=Linked_name.index(name)
     link=ll_link[x]
     print(link)
-    return redirect(url_for('movie_name',name = name))
+    return redirect(url_for('movie_name',name = name,link=link))
 
 @app.route('/crowdengine/write/<name>',methods=["POST"])   
 def write_db(name):
@@ -95,18 +101,34 @@ def write_db(name):
         hit = request.form["Hit"]
         color = request.form["Dresscolor"]
         print(link)
-
+        comment = request.form["logname"]
+        print(comment)
         data.write(movie=movie,actor=actor,duration=dur,hairstyle=hair,role=role,dresscolor=color,target=hit)
 
-    return render_template('movies.html',p="ok" ,name=movie,link=link)
+    return render_template('movies.html',p="ok" ,name=movie,link="link")
 
 @app.route('/download/')
 def download():
     return data.get_csv(a = app)
 
-@app.route('/crowdengine/submit')
-def submit():
-    return "a"
+@app.route('/submit/<string:name>',methods=["POST","GET"])
+def submit(name):
+    name=name
+    x=Linked_name.index(name)
+    link=ll_link[x]
+    data={
+    "name" : name,
+    "link" : link,
+    
+
+    }
+
+    print(data)
+
+    collection.insert_one(data)
+
+
+    return name
 
 if __name__ == "__main__":
     app.run()
