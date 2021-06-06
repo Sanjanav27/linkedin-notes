@@ -64,18 +64,20 @@ def movie_name(name):
         for all in all.values():
             namemongo.append(all)
     print(namemongo)
+    a=[]
     if name in namemongo:
         query={"name":name}
         doc=collection.find(query)
         for y in doc:
             print(y)
-            print(y["notes"])
+            a.append(y["notes"])
+    
         
 
 
 
     
-    return render_template('movies.html' ,name = name,actor ="vadivelu",link=link)
+    return render_template('movies.html' ,name = name,actor ="vadivelu",link=link,a=a)
 
 @app.errorhandler(500)
 def internal_error(e):
