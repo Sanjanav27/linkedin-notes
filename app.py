@@ -136,7 +136,7 @@ def submit(name):
     collection.insert_one(data)
 
 
-    return name
+    return "added successfully"
 
 if __name__ == "__main__":
     app.run()
