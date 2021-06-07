@@ -88,13 +88,9 @@ def movie_name(name):
         for y in doc:
             print(y)
             a.append(y["notes"])
-    
         
-
-
-
     
-    return render_template('movies.html' ,name = name,actor ="vadivelu",link=link,a=a)
+    return render_template('movies.html' ,name = name,link=link,a=a)
 
 @app.errorhandler(500)
 def internal_error(e):
@@ -187,7 +183,7 @@ def submit(name):
 
         collection.insert_one(data)
         sheet2.write(x, 0, name) 
-        sheet2.write(x, 1, comment)  
+        sheet2.write(x, 2, comment)  
         wb.save('static/data.xlsx')
     
 
